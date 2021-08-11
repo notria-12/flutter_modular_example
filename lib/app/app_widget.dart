@@ -7,12 +7,8 @@ class AppWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      initialRoute: '/',
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text("Modular"),
-        ),
-      ),
+      initialRoute: '/home',
+      debugShowCheckedModeBanner: false,
     ).modular();
   }
 }
