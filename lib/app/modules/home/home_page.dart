@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:mobx/mobx.dart';
 import 'package:modular_example/app/modules/home/home_controller.dart';
 import 'package:modular_example/app/modules/home/models/todo_model.dart';
 
@@ -41,13 +40,18 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             itemCount: list.length,
             itemBuilder: (context, index) {
               TodoModel todoModel = list[index];
-              return CheckboxListTile(
-                value: todoModel.check,
-                onChanged: (checked) {
-                  todoModel.check = checked!;
-                  todoModel.save();
-                },
+              return ListTile(
                 title: Text(todoModel.title),
+                onTap: () {
+                  _showDialog(model: todoModel);
+                },
+                trailing: Checkbox(
+                  value: todoModel.check,
+                  onChanged: (checked) {
+                    todoModel.check = checked!;
+                    todoModel.save();
+                  },
+                ),
               );
             },
           );
@@ -55,8 +59,41 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
-        onPressed: () {},
+        onPressed: _showDialog,
       ),
     );
+  }
+
+  _showDialog({TodoModel? model}) {
+    model ??= TodoModel(title: '', check: false);
+    showDialog(
+        context: context,
+        builder: (_) {
+          return AlertDialog(
+              actions: [
+                TextButton(
+                    onPressed: () {
+                      Modular.to.pop();
+                    },
+                    child: Text(
+                      'Cancelar',
+                      style: TextStyle(color: Colors.redAccent),
+                    )),
+                TextButton(
+                    onPressed: () async {
+                      await model!.save();
+                      Modular.to.pop();
+                    },
+                    child: Text(
+                      'Adicionar',
+                      style: TextStyle(color: Colors.greenAccent),
+                    ))
+              ],
+              title: Text('Adicionar novo'),
+              content: TextField(
+                  onChanged: (value) => model!.title = value,
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(), labelText: 'escreva..')));
+        });
   }
 }

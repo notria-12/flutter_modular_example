@@ -5,7 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class TodoModel {
   String title;
   bool check;
-  final DocumentReference? reference;
+  DocumentReference? reference;
 
   TodoModel({
     required this.title,
@@ -33,8 +33,12 @@ class TodoModel {
   factory TodoModel.fromJson(String source) =>
       TodoModel.fromMap(json.decode(source));
 
-  save() {
+  Future save() async {
+    //TODO: procurar melhor arquitetura pra colocar este método
     if (reference == null) {
+      reference = await FirebaseFirestore.instance
+          .collection('todo')
+          .add({'title': title, 'check': check});
     } else {
       reference!.update({'title': title, 'check': check});
     }
