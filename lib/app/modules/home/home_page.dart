@@ -47,7 +47,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 },
                 leading: IconButton(
                   icon: Icon(
-                    Icons.close,
+                    Icons.delete,
                     color: Colors.redAccent,
                   ),
                   onPressed: () {
