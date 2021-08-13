@@ -45,6 +45,15 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 onTap: () {
                   _showDialog(model: todoModel);
                 },
+                leading: IconButton(
+                  icon: Icon(
+                    Icons.close,
+                    color: Colors.redAccent,
+                  ),
+                  onPressed: () {
+                    todoModel.delete();
+                  },
+                ),
                 trailing: Checkbox(
                   value: todoModel.check,
                   onChanged: (checked) {
@@ -89,8 +98,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                       style: TextStyle(color: Colors.greenAccent),
                     ))
               ],
-              title: Text('Adicionar novo'),
-              content: TextField(
+              title: Text(model!.title.isEmpty ? 'Adicionar novo' : 'Editar'),
+              content: TextFormField(
+                  initialValue: model!.title,
                   onChanged: (value) => model!.title = value,
                   decoration: InputDecoration(
                       border: OutlineInputBorder(), labelText: 'escreva..')));

@@ -44,6 +44,10 @@ class TodoModel {
     }
   }
 
+  Future delete() {
+    return reference!.delete();
+  }
+
   @override
   String toString() => 'TodoModel(title: $title, check: $check)';
 }
