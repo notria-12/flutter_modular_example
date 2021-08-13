@@ -1,12 +1,16 @@
 import 'dart:convert';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class TodoModel {
   String title;
   bool check;
+  final DocumentReference? reference;
 
   TodoModel({
     required this.title,
     required this.check,
+    this.reference,
   });
 
   Map<String, dynamic> toMap() {
@@ -16,10 +20,11 @@ class TodoModel {
     };
   }
 
-  factory TodoModel.fromMap(Map<String, dynamic> map) {
+  factory TodoModel.fromMap(DocumentSnapshot doc) {
     return TodoModel(
-      title: map['title'],
-      check: map['check'],
+      title: doc['title'],
+      check: doc['check'],
+      reference: doc.reference,
     );
   }
 
@@ -27,6 +32,13 @@ class TodoModel {
 
   factory TodoModel.fromJson(String source) =>
       TodoModel.fromMap(json.decode(source));
+
+  save() {
+    if (reference == null) {
+    } else {
+      reference!.update({'title': title, 'check': check});
+    }
+  }
 
   @override
   String toString() => 'TodoModel(title: $title, check: $check)';

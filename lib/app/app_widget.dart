@@ -9,6 +9,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       initialRoute: '/home',
       debugShowCheckedModeBanner: false,
+      theme: ThemeData.dark(),
     ).modular();
   }
 }
